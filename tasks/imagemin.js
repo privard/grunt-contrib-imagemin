@@ -27,6 +27,8 @@ module.exports = function (grunt) {
 
         async.forEachLimit(files, os.cpus().length, function (file, next) {
             var msg;
+            var origSize = fs.statSync(file.src[0]).size;
+
             var imagemin = new Imagemin()
                 .src(file.src[0])
                 .dest(file.dest)
@@ -42,8 +44,7 @@ module.exports = function (grunt) {
                 if (err) {
                     grunt.warn(err);
                 }
-
-                var origSize = fs.statSync(file.src[0]).size;
+                
                 var diffSize = origSize - data.contents.length;
                 totalSaved += diffSize;
 
